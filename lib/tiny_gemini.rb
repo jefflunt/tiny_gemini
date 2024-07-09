@@ -59,14 +59,6 @@ class TinyGemini
   def chat(messages)
     body = { contents: messages }
     body.merge!(system_instruction: { parts: { text: @system_instruction } }) if @system_instruction
-    body.merge!({
-        safetySettings: [
-          {
-              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-              threshold: "BLOCK_NONE"
-          }
-      ]
-    })
 
     request_body = body.to_json
 
