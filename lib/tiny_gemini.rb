@@ -11,7 +11,7 @@ class TinyGemini
     host: 'generativelanguage.googleapis.com',
     path: '/v1beta/models',
     action: 'generateContent',
-    api_key: ENV['GEMINI_KEY'],
+    api_key: ENV['TINY_GEMINI_KEY'],
     system_instruction: nil
   )
 
