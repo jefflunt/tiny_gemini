@@ -59,6 +59,15 @@ class TinyGemini
   def chat(messages)
     body = { contents: messages }
     body.merge!(system_instruction: { parts: { text: @system_instruction } }) if @system_instruction
+    body.merge!({
+        safetySettings: [
+          {
+              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+              threshold: "BLOCK_NONE"
+          }
+      ]
+    })
+
     request_body = body.to_json
 
     uri = URI("https://#{@host}#{@path}/#{@model}:#{@action}?key=#{@api_key}")
@@ -70,7 +79,17 @@ class TinyGemini
       raise TinyGeminiModelError, "Gemini API Error: #{response.code}\n#{JSON.pretty_generate(response.body)}"
     end
 
-    JSON.parse(response.body)['candidates'].first.dig('content', 'parts').first['text']
+    # response and error handling
+    parsed_response = JSON.parse(response.body)
+    raise(TinyGeminiModelError, "No condidates in Gemini response") unless parsed_response['candidates']
+
+    first_candidate_response = parsed_response['candidates'].first
+    raise(TinyGeminiModelError, "No first candidate response in Gemini response") unless first_candidate_response
+
+    text_response = first_candidate_response&.dig('content', 'parts')&.first['text']
+    raise(TinyGeminiModelError, "Text response is nil or empty: `#{text_response.inspect}`") unless text_response.present?
+
+    text_response
   end
 end
 
