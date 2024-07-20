@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "tiny_gemini"
-  s.version     = "2.0.0"
+  s.version     = "2.0.1"
   s.description = "a tiny gem for using Google Gemini's generative models for chat"
   s.summary     = "a tiny gem for using Google Gemini's generative models for chat"
   s.authors     = ["Jeff Lunt"]
