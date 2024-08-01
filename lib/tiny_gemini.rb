@@ -78,8 +78,8 @@ class TinyGemini
     first_candidate_response = parsed_response['candidates'].first
     raise(TinyGeminiModelError, "No first candidate response in Gemini response") unless first_candidate_response
 
-    text_response = first_candidate_response&.dig('content', 'parts')&.first&.dig('text')
-    raise(TinyGeminiModelError, "Text response is nil or empty: `#{text_response.inspect}`") unless text_response.present?
+    text_response = first_candidate_response&.dig('content', 'parts')&.first&.dig('text')&.strip
+    raise(TinyGeminiModelError, "Text response is nil or empty: `#{text_response.inspect}`") if text_reponse.nil? || text_response.length == 0
 
     text_response
   end
