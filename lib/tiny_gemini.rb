@@ -56,9 +56,10 @@ class TinyGemini
   # NOTE: if you want the model to impersonate a character (i.e. a talking cat)
   # you need to have set the `system_instruction` parameter when initializing
   # this class to make that work
-  def prompt(messages)
+  def prompt(messages, safety_settings=nil)
     body = { contents: messages }
     body.merge!(system_instruction: { parts: { text: @system_instruction } }) if @system_instruction
+    body.merge!(safety_settings: safety_settings) if safety_settings
 
     request_body = body.to_json
 
