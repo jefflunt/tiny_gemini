@@ -24,6 +24,7 @@ class TinyGemini
   end
 
   # sends a request to POST generateContent
+  # returns the parsed JSON reply
   #
   # messages: an array of hashes in the following format:
   # [
@@ -76,13 +77,7 @@ class TinyGemini
     parsed_response = JSON.parse(response.body)
     raise(TinyGeminiModelError, "No condidates in Gemini response") unless parsed_response['candidates']
 
-    first_candidate_response = parsed_response['candidates'].first
-    raise(TinyGeminiModelError, "No first candidate response in Gemini response") unless first_candidate_response
-
-    text_response = first_candidate_response&.dig('content', 'parts')&.first&.dig('text')&.strip
-    raise(TinyGeminiModelError, "Text response is nil or empty: `#{text_response.inspect}`") if text_response.nil? || text_response.length == 0
-
-    text_response
+    parsed_response
   end
 end
 
